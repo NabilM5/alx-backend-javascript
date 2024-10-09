@@ -1,64 +1,21 @@
-export interface Student {
-  firstName: string;
-  lastName: string;
-  age: number;
-  location: string;
+export interface MajorCredits {
+  credits: number & { __brand: "MajorCredits.credits" };
 }
 
-// Sample data for students
-const studentA: Student = {
-  firstName: "John",
-  lastName: "Doe",
-  age: 20,
-  location: "New York",
-};
+export interface MinorCredits {
+  credits: number & { __brand: "MinorCredits.credits" };
+}
 
-const studentB: Student = {
-  firstName: "Jane",
-  lastName: "Doe",
-  age: 22,
-  location: "Los Angeles",
-};
+export function sumMajorCredits(
+  subject1: MajorCredits,
+  subject2: MajorCredits
+): MajorCredits {
+  return { credits: subject1.credits + subject2.credits } as MajorCredits;
+}
 
-const studentsList: Array<Student> = [studentA, studentB];
-
-export const displayStudents = (students: Array<Student>): void => {
-  const table = document.createElement("table");
-  const tableHead = document.createElement("thead");
-  const headRow = document.createElement("tr");
-  const tableBody = document.createElement("tbody");
-
-  // Fixed closing tags
-  headRow.insertAdjacentHTML("beforeend", "<td>FirstName</td>");
-  headRow.insertAdjacentHTML("beforeend", "<td>Location</td>");
-  tableHead.appendChild(headRow); // Better to use appendChild here for consistency
-
-  students.forEach((student) => {
-    const bodyRow = document.createElement("tr");
-    bodyRow.insertAdjacentHTML("beforeend", `<td>${student.firstName}</td>`);
-    bodyRow.insertAdjacentHTML("beforeend", `<td>${student.location}</td>`);
-    tableBody.appendChild(bodyRow); // Using appendChild for consistency
-  });
-
-  table.appendChild(tableHead);
-  table.appendChild(tableBody);
-  document.body.appendChild(table);
-};
-
-displayStudents(studentsList);
-document.title = "Task 0"; // Set the document title
-
-// Optional: Apply some basic styles via JavaScript
-const styleSheetElement = document.createElement("style");
-styleSheetElement.textContent = `
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  td, th {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  tr:nth-child(even){background-color: #f2f2f2;}
-`;
-document.head.appendChild(styleSheetElement);
+export function sumMinorCredits(
+  subject1: MinorCredits,
+  subject2: MinorCredits
+): MinorCredits {
+  return { credits: subject1.credits + subject2.credits } as MinorCredits;
+}
