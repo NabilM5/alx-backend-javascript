@@ -1,64 +1,55 @@
-export interface Student {
-  firstName: string;
-  lastName: string;
-  age: number;
+export interface Teacher {
+  readonly firstName: string;
+  readonly lastName: string;
+  fullTimeEmployee: boolean;
+  yearsOfExperience?: number;
   location: string;
+  [index: string]: any;
 }
 
-// Sample data for students
-const studentA: Student = {
-  firstName: "John",
-  lastName: "Doe",
-  age: 20,
-  location: "New York",
-};
+export interface Directors extends Teacher {
+  numberOfReports: number;
+}
 
-const studentB: Student = {
-  firstName: "Jane",
-  lastName: "Doe",
-  age: 22,
-  location: "Los Angeles",
-};
+export interface printTeacherFunction {
+  (firstName: string, lastName: string): string;
+}
 
-const studentsList: Array<Student> = [studentA, studentB];
+export function printTeacher(firstName: string, lastName: string): string {
+  return `${firstName[0]}. ${lastName}`;
+}
 
-export const displayStudents = (students: Array<Student>): void => {
-  const table = document.createElement("table");
-  const tableHead = document.createElement("thead");
-  const headRow = document.createElement("tr");
-  const tableBody = document.createElement("tbody");
+export interface IStudentClassConstructor {
+  new (firstName: string, lastName: string): IStudentClass;
+}
 
-  // Fixed closing tags
-  headRow.insertAdjacentHTML("beforeend", "<td>FirstName</td>");
-  headRow.insertAdjacentHTML("beforeend", "<td>Location</td>");
-  tableHead.appendChild(headRow); // Better to use appendChild here for consistency
+export interface IStudentClass {
+  workOnHomework(): string;
+  displayName(): string;
+}
 
-  students.forEach((student) => {
-    const bodyRow = document.createElement("tr");
-    bodyRow.insertAdjacentHTML("beforeend", `<td>${student.firstName}</td>`);
-    bodyRow.insertAdjacentHTML("beforeend", `<td>${student.location}</td>`);
-    tableBody.appendChild(bodyRow); // Using appendChild for consistency
-  });
+export class StudentClass implements IStudentClass {
+  private _firstName!: string;
+  private _lastName!: string;
 
-  table.appendChild(tableHead);
-  table.appendChild(tableBody);
-  document.body.appendChild(table);
-};
-
-displayStudents(studentsList);
-document.title = "Task 0"; // Set the document title
-
-// Optional: Apply some basic styles via JavaScript
-const styleSheetElement = document.createElement("style");
-styleSheetElement.textContent = `
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  constructor(firstName: string, lastName: string) {
+    this._firstName = firstName;
+    this._lastName = lastName;
   }
-  td, th {
-    border: 1px solid #ddd;
-    padding: 8px;
+
+  workOnHomework() {
+    return "Currently working";
   }
-  tr:nth-child(even){background-color: #f2f2f2;}
-`;
-document.head.appendChild(styleSheetElement);
+
+  displayName() {
+    return this._firstName;
+  }
+}
+
+export function createStudent(
+  ctor: IStudentClassConstructor,
+  firstName: string,
+  lastName: string
+): IStudentClass {
+  return new ctor(firstName, lastName);
+}
